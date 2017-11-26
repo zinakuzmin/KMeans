@@ -1,0 +1,35 @@
+﻿Build started 9/13/2017 5:47:48 PM.
+     1>Project "C:\Users\afeka.ACADEMIC\Desktop\Zohar\Histograma\Histograma\Histograma.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Touching "Debug\Histograma.unsuccessfulbuild".
+       AddCudaCompileDeps:
+       Skipping target "AddCudaCompileDeps" because all output files are up-to-date with respect to the input files.
+       AddCudaCompilePropsDeps:
+       Skipping target "AddCudaCompilePropsDeps" because all output files are up-to-date with respect to the input files.
+       CudaBuild:
+       Skipping target "CudaBuild" because all output files are up-to-date with respect to the input files.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"C:\Program Files\MPICH2\include" /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.0\include" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /openmp /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
+         main.cpp
+     1>c:\users\afeka.academic\desktop\zohar\histograma\histograma\main.cpp(10): warning C4068: unknown pragma
+     1>c:\users\afeka.academic\desktop\zohar\histograma\histograma\main.cpp(65): warning C4101: 'tid' : unreferenced local variable
+     1>c:\users\afeka.academic\desktop\zohar\histograma\histograma\main.cpp(65): warning C4101: 'j' : unreferenced local variable
+       ManifestResourceCompile:
+         All outputs are up-to-date.
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\afeka.ACADEMIC\Desktop\Zohar\Histograma\Debug\Histograma.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Program Files\MPICH2\lib" /LIBPATH:"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.0\lib\Win32" cudart.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\Histograma.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\afeka.ACADEMIC\Desktop\Zohar\Histograma\Debug\Histograma.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\afeka.ACADEMIC\Desktop\Zohar\Histograma\Debug\Histograma.lib" /MACHINE:X86 Debug\kernel.cu.obj
+         Debug\Histograma.exe.embed.manifest.res
+         Debug\main.obj
+     1>main.obj : error LNK2019: unresolved external symbol _MPI_Finalize referenced in function _main
+     1>main.obj : error LNK2019: unresolved external symbol _MPI_Recv referenced in function _main
+     1>main.obj : error LNK2019: unresolved external symbol _MPI_Send referenced in function _main
+     1>main.obj : error LNK2019: unresolved external symbol _MPI_Get_processor_name referenced in function _main
+     1>main.obj : error LNK2019: unresolved external symbol _MPI_Comm_size referenced in function _main
+     1>main.obj : error LNK2019: unresolved external symbol _MPI_Comm_rank referenced in function _main
+     1>main.obj : error LNK2019: unresolved external symbol _MPI_Init referenced in function _main
+     1>C:\Users\afeka.ACADEMIC\Desktop\Zohar\Histograma\Debug\Histograma.exe : fatal error LNK1120: 7 unresolved externals
+     1>Done Building Project "C:\Users\afeka.ACADEMIC\Desktop\Zohar\Histograma\Histograma\Histograma.vcxproj" (build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:00.33

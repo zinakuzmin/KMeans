@@ -1,0 +1,322 @@
+results of sequential run:
+
+
+qm = 1, max clusters = 30
+
+Center 0 has 39points
+Center 1 has 2points
+Center 2 has 1points
+Center 3 has 102points
+Center 4 has 67points
+Center 5 has 46points
+Center 6 has 7points
+Center 7 has 1points
+Center 8 has 37points
+Center 9 has 31points
+Center 10 has 29points
+Center 11 has 7points
+Center 12 has 24points
+Center 13 has 85points
+Center 14 has 15points
+Center 15 has 19points
+Center 16 has 28points
+Center 17 has 22points
+Center 18 has 16points
+Center 19 has 36points
+Center 20 has 4points
+Center 21 has 11points
+Center 22 has 21points
+Center 23 has 31points
+Center 24 has 43points
+Center 25 has 32points
+Center 26 has 2points
+Center 27 has 2points
+Center 28 has 51points
+calculated quality is 1.21523 and expected 1
+time taken  1624.00 seconds.
+
+qm = 7, max clusters = 30
+Center 0 has 314points
+Center 1 has 497points
+calculated quality is 1.39494 and expected 7
+time taken  4.00 seconds.
+
+qm = 1.39
+Center 0 has 72points
+Center 1 has 7points
+Center 2 has 1points
+Center 3 has 115points
+Center 4 has 46points
+Center 5 has 49points
+Center 6 has 10points
+Center 7 has 1points
+Center 8 has 36points
+Center 9 has 49points
+Center 10 has 56points
+Center 11 has 13points
+Center 12 has 34points
+Center 13 has 97points
+Center 14 has 37points
+Center 15 has 30points
+Center 16 has 37points
+Center 17 has 19points
+Center 18 has 15points
+Center 19 has 41points
+Center 20 has 8points
+Center 21 has 15points
+Center 22 has 23points
+calculated quality is 1.35985 and expected 1.39
+time taken  594.00 seconds.
+
+after fixing diameter calculation
+qm = 7
+Center 0 has 314points
+Center 1 has 497points
+calculated quality is 1.99113 and expected 7
+time taken  14.00 seconds.
+
+Center 0 has 314points
+Center 1 has 497points
+calculated quality is 1.99113 and expected 7
+time taken  15.00 seconds.
+
+added omp 4 threads and got wrong result
+_____________________________________________
+Center 0 has 315points
+Center 1 has 496points
+calculated quality is 2.58689 and expected 7
+time taken  36.00 seconds.
+
+After recalc points were moved 33
+Center 0 has 478points
+Center 1 has 333points
+calculated quality is 2.32077 and expected 7
+time taken  36.00 seconds.
+
+
+___________________________________
+small input seq
+
+qm = 0.1
+Center 0 has 1points
+Center 1 has 1points
+Center 2 has 2points
+Center 3 has 2points
+Center 4 has 1points
+Center 5 has 1points
+Center 6 has 1points
+Center 7 has 1points
+calculated quality is 0.0581684 and expected 0.1
+time taken  1.00 seconds.
+
+After recalc points were moved 0
+Center 0 has 1points
+Center 1 has 1points
+Center 2 has 2points
+Center 3 has 2points
+Center 4 has 1points
+Center 5 has 1points
+Center 6 has 1points
+Center 7 has 1points
+calculated quality is 0.0581684 and expected 0.1
+execution time 0.553
+Execution completed, press return
+
+0.497
+0.514
+0.545
+0.544
+0.534
+
+
+
+
+small input omp 4 threads
+qm = 0.1
+Center 0 has 1points
+Center 1 has 1points
+Center 2 has 2points
+Center 3 has 2points
+Center 4 has 1points
+Center 5 has 1points
+Center 6 has 1points
+Center 7 has 1points
+calculated quality is 0.0581684 and expected 0.1
+time taken  1.00 seconds.
+
+After recalc points were moved 0
+Center 0 has 1points
+Center 1 has 1points
+Center 2 has 2points
+Center 3 has 2points
+Center 4 has 1points
+Center 5 has 1points
+Center 6 has 1points
+Center 7 has 1points
+calculated quality is 0.0581684 and expected 0.1
+execution time0.666
+
+execution time 0.746
+
+execution time 0.626
+
+execution time 0.599
+
+
+small inout omp 8 threads
+Center 0 has 1points
+Center 1 has 1points
+Center 2 has 2points
+Center 3 has 2points
+Center 4 has 1points
+Center 5 has 1points
+Center 6 has 1points
+Center 7 has 1points
+calculated quality is 0.0581684 and expected 0.1
+execution time 0.676
+
+0.633
+0.691
+0.696
+0.68
+0.65
+
+
+___________________ 
+big input seq
+qm = 7
+
+calculated quality is 1.99113 and expected 7
+execution time 14.187
+
+Center 0 has 314points
+Center 1 has 497points
+calculated quality is 1.99113 and expected 7
+execution time 30.216
+
+Center 0 has 314points
+Center 1 has 497points
+calculated quality is 1.99113 and expected 7
+execution time 14.205
+
+After recalc points were moved 0
+Center 0 has 314points
+Center 1 has 497points
+calculated quality is 1.99113 and expected 7
+execution time 14.207
+
+
+details
+
+Time to execute printPoints 0.041
+Time to execute reaccociatePointsToCluster 0.066
+After recalc points were moved 0
+Center 0 has 314points
+Center 1 has 497points
+Time to execute countPointsInCluster 0.003
+Time to execute findAllPointsInCluster 0.017
+Time to execute calculateClusterDiameter 3.846
+Time to execute findAllPointsInCluster 0.031
+Time to execute calculateClusterDiameter 9.501
+Time to execute calculateQualityMeature 13.38
+calculated quality is 1.99113 and expected 7
+execution time 14.481
+
+Time to execute printPoints 0.016
+Time to execute accociatePointsToCluster 0.063
+Time to execute countPointsInCluster 0.003
+Time to execute calculateClusterCenter 0.008
+Time to execute printPoints 0.041
+Time to execute reaccociatePointsToCluster 0.067
+After recalc points were moved 0
+Center 0 has 314points
+Center 1 has 497points
+Time to execute countPointsInCluster 0.002
+Time to execute findAllPointsInCluster 0.015
+Time to execute calculateClusterDiameter 3.76
+Time to execute findAllPointsInCluster 0.039
+Time to execute calculateClusterDiameter 9.518
+Time to execute calculateQualityMeature 13.319
+calculated quality is 1.99113 and expected 7
+execution time 14.372
+
+
+
+
+
+big input par
+qm = 7
+
+Center 0 has 314points
+Center 1 has 497points
+calculated quality is 1.99113 and expected 7
+execution time 19.755
+
+Center 0 has 314points
+Center 1 has 497points
+calculated quality is 1.99113 and expected 7
+execution time 86.848
+
+Center 0 has 314points
+Center 1 has 497points
+calculated quality is 1.99113 and expected 7
+execution time 20.093
+
+Center 0 has 314points
+Center 1 has 497points
+calculated quality is 1.99113 and expected 7
+execution time 19.767
+
+
+___________________________
+
+big input parallel find diameter cluster
+qm = 7
+8 threads
+outer for is parallel
+
+Center 0 has 314points
+Center 1 has 497points
+calculated quality is 1.99113 and expected 7
+execution time 7.758
+
+Center 0 has 314points
+Center 1 has 497points
+calculated quality is 1.99113 and expected 7
+execution time 8.56
+
+After recalc points were moved 0
+Center 0 has 314points
+Center 1 has 497points
+calculated quality is 1.99113 and expected 7
+execution time 7.662
+
+16 threads
+
+Center 0 has 314points
+Center 1 has 497points
+calculated quality is 1.99113 and expected 7
+execution time 7.686
+
+Center 0 has 314points
+Center 1 has 497points
+calculated quality is 1.99113 and expected 7
+execution time 7.588
+
+
+
+16 threads same as before but with prints
+
+Time to execute printPoints 0.042
+Time to execute reaccociatePointsToCluster 0.081
+After recalc points were moved 0
+Center 0 has 314points
+Center 1 has 497points
+Time to execute countPointsInCluster 0.002
+Time to execute findAllPointsInCluster 0.018
+Time to execute calculateClusterDiameter 1.911
+Time to execute findAllPointsInCluster 0.046
+Time to execute calculateClusterDiameter 4.793
+Time to execute calculateQualityMeature 6.741
+calculated quality is 1.99113 and expected 7
+execution time 7.847
