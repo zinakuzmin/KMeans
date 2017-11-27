@@ -349,16 +349,26 @@ double calculateDistanceBetweenPoints(Point point1, Point point2){
 
 
 	//########################9
-	double* arr1 = new double[52];
+	//double* arr1 = new double[52];
+	double arr1[52] = { 0 };
 	makeArray(arr1, point1.coordinates);
 	//arr1 = &point1.coordinates[0];
-	double* arr2 = new double[52];
+	//double* arr2 = new double[52];
+	double arr2[52] = { 0 };
 	makeArray(arr2, point2.coordinates);
 	//arr2 = &point2.coordinates[0];
 	double result = 0;
 	int numOfThreads = point1.coordinates.size();
+	double arr3[52] = { 0 };
 	
-	CudaCalcDistance(arr1, arr2, point1.coordinates.size(), &result, numOfThreads);
+	//CudaCalcDistance(arr1, arr2, point1.coordinates.size(), &result, numOfThreads);
+	calcDistanceCoordiantesWithCuda(arr1, arr2, arr3, 52);
+
+
+	double sum1 = 0;
+	for (int i = 0; i < 52; i++){
+		sum1 +=arr3[i];
+	}
 
 
 	//#########################
@@ -370,20 +380,31 @@ double calculateDistanceBetweenPoints(Point point1, Point point2){
 	point2.toString() ;
 	cout << distance_total << endl;*/
 
-	/*clock_t end = clock();
+	clock_t end = clock();
 	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
 
-	cout << "Time to execute calculateDistanceBetweenPoints "<< elapsed_secs << endl;*/
+	cout << "Time to execute calculateDistanceBetweenPoints "<< elapsed_secs << endl;
 
-	return distance_total;
+	//return distance_total;
+
+	//return result;
+
+
+
+	return sqrt(sum1);
+
+	
+	
+
 }
 
 
 double* makeArray(double * arr, vector<double> coordinates){
 	double array1[52] = {0};
 	for (int i = 0; i < coordinates.size(); i++)
-		array1[i] = coordinates[i];
-	return array1;
+		arr[i] = (float)coordinates[i];
+	//arr = array1;
+	return arr;
 }
 
 //The diameter of a cluster is the maximum distance between any two points of the cluster

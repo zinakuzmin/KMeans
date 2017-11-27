@@ -1,4 +1,4 @@
-﻿Build started 11/26/2017 12:40:08 PM.
+﻿Build started 11/27/2017 11:06:36 PM.
      1>Project "C:\Users\Dave\Desktop\zinacpp\finalProject_327366746\FinalProject\Histograma\Histograma.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "x64\Debug\FinalProject.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -16,13 +16,11 @@
          main.cpp
      1>main.cpp(42): warning C4101: 'myid' : unreferenced local variable
      1>main.cpp(41): warning C4101: 'numprocs' : unreferenced local variable
-     1>main.cpp(359): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
-     1>main.cpp(361): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
+     1>main.cpp(361): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
      1>main.cpp(310): warning C4101: 'tid' : unreferenced local variable
-     1>main.cpp(386): warning C4172: returning address of local variable or temporary
-     1>main.cpp(423): warning C4101: 'i' : unreferenced local variable
-     1>main.cpp(423): warning C4101: 'j' : unreferenced local variable
-     1>main.cpp(501): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
+     1>main.cpp(444): warning C4101: 'i' : unreferenced local variable
+     1>main.cpp(444): warning C4101: 'j' : unreferenced local variable
+     1>main.cpp(522): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
        ManifestResourceCompile:
          All outputs are up-to-date.
        Link:
@@ -52,4 +50,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.39
+Time Elapsed 00:00:03.34
