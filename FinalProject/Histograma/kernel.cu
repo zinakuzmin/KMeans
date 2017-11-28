@@ -116,21 +116,21 @@ cudaError_t calcDistanceCoordiantesWithCuda(double* coordinates_1, double* coord
 	//calc2pointsWith4Blocks<<<4, 13>>>(dev_coordinates_1, dev_coordinates_2 ,dev_coordinates_arr);
     // Check for any errors launching the kernel
     
-	cudaStatus = cudaGetLastError();
-    if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "addKernel launch failed: %s\n", cudaGetErrorString(cudaStatus));
-        //goto Error;
-		error(dev_coordinates_1, dev_coordinates_2, dev_coordinates_arr);
-    }
+	//cudaStatus = cudaGetLastError();
+ //   if (cudaStatus != cudaSuccess) {
+ //       fprintf(stderr, "addKernel launch failed: %s\n", cudaGetErrorString(cudaStatus));
+ //       //goto Error;
+	//	error(dev_coordinates_1, dev_coordinates_2, dev_coordinates_arr);
+ //   }
     
     // cudaDeviceSynchronize waits for the kernel to finish, and returns
     // any errors encountered during the launch.
-    cudaStatus = cudaDeviceSynchronize();
-    if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "cudaDeviceSynchronize returned error code %d after launching addKernel!\n", cudaStatus);
-        //goto Error;
-		error(dev_coordinates_1, dev_coordinates_2, dev_coordinates_arr);
-    }
+  //  cudaStatus = cudaDeviceSynchronize();
+  //  if (cudaStatus != cudaSuccess) {
+  //      fprintf(stderr, "cudaDeviceSynchronize returned error code %d after launching addKernel!\n", cudaStatus);
+  //      //goto Error;
+		//error(dev_coordinates_1, dev_coordinates_2, dev_coordinates_arr);
+  //  }
 
     // Copy output vector from GPU buffer to host memory.
     cudaStatus = cudaMemcpyAsync(coordinates_arr, dev_coordinates_arr, sizeof(double)*num_coordinates, cudaMemcpyDeviceToHost);

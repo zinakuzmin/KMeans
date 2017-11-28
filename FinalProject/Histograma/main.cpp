@@ -338,60 +338,60 @@ double calculateDistanceBetweenPoints(Point point1, Point point2){
 
 	//###########################
 
-	/*for (int i = 0 ; i < point1.coordinates.size() ; i++)
+	for (int i = 0 ; i < point1.coordinates.size() ; i++)
 	{
 		distance += pow(point1.coordinates[i] - point2.coordinates[i],2);
 	}
 
-	distance_total = sqrt(distance);*/
+	distance_total = sqrt(distance);
 	
 
 
 
 	//########################9
-	//double* arr1 = new double[52];
-	double arr1[52] = { 0 };
-	makeArray(arr1, point1.coordinates);
-	//arr1 = &point1.coordinates[0];
-	//double* arr2 = new double[52];
-	double arr2[52] = { 0 };
-	makeArray(arr2, point2.coordinates);
-	//arr2 = &point2.coordinates[0];
-	double result = 0;
-	int numOfThreads = point1.coordinates.size();
-	double arr3[52] = { 0 };
-	
-	//CudaCalcDistance(arr1, arr2, point1.coordinates.size(), &result, numOfThreads);
-	calcDistanceCoordiantesWithCuda(arr1, arr2, arr3, 52);
+	////double* arr1 = new double[52];
+	//double arr1[52] = { 0 };
+	//makeArray(arr1, point1.coordinates);
+	////arr1 = &point1.coordinates[0];
+	////double* arr2 = new double[52];
+	//double arr2[52] = { 0 };
+	//makeArray(arr2, point2.coordinates);
+	////arr2 = &point2.coordinates[0];
+	//double result = 0;
+	//int numOfThreads = point1.coordinates.size();
+	//double arr3[52] = { 0 };
+	//
+	////CudaCalcDistance(arr1, arr2, point1.coordinates.size(), &result, numOfThreads);
+	//calcDistanceCoordiantesWithCuda(arr1, arr2, arr3, 52);
 
 
-	double sum1 = 0;
-	for (int i = 0; i < 52; i++){
-		sum1 +=arr3[i];
-	}
+	//double sum1 = 0;
+	//for (int i = 0; i < 52; i++){
+	//	sum1 +=arr3[i];
+	//}
 
 
-	//#########################
-	
+	////#########################
+	//
 
-	/*cout << "distance between " <<endl;
-	point1.toString() ;
-	cout << endl << " and " << endl;
-	point2.toString() ;
-	cout << distance_total << endl;*/
+	///*cout << "distance between " <<endl;
+	//point1.toString() ;
+	//cout << endl << " and " << endl;
+	//point2.toString() ;
+	//cout << distance_total << endl;*/
 
-	clock_t end = clock();
+	/*clock_t end = clock();
 	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
 
-	cout << "Time to execute calculateDistanceBetweenPoints "<< elapsed_secs << endl;
+	cout << "Time to execute calculateDistanceBetweenPoints "<< elapsed_secs << endl;*/
 
-	//return distance_total;
+	return distance_total;
 
 	//return result;
 
 
 
-	return sqrt(sum1);
+	//return sqrt(sum1);
 
 	
 	
