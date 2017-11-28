@@ -1,4 +1,4 @@
-﻿Build started 11/28/2017 9:55:26 AM.
+﻿Build started 11/29/2017 1:23:10 AM.
      1>Project "C:\Users\Dave\Desktop\zinacpp\finalProject_327366746\FinalProject\Histograma\Histograma.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "x64\Debug\FinalProject.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -14,12 +14,22 @@
          All outputs are up-to-date.
          c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\x86_amd64\CL.exe /c /I"C:\Program Files\MPICH2\include" /I"C:\Program Files\MPICH2\include" /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include" /Zi /nologo /W3 /WX- /Od /D WIN32 /D WIN64 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /openmp /Fo"x64\Debug\\" /Fd"x64\Debug\vc100.pdb" /Gd /TP /errorReport:prompt main.cpp
          main.cpp
-     1>main.cpp(42): warning C4101: 'myid' : unreferenced local variable
-     1>main.cpp(41): warning C4101: 'numprocs' : unreferenced local variable
-     1>main.cpp(310): warning C4101: 'tid' : unreferenced local variable
-     1>main.cpp(444): warning C4101: 'i' : unreferenced local variable
-     1>main.cpp(444): warning C4101: 'j' : unreferenced local variable
-     1>main.cpp(522): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
+     1>main.cpp(212): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>main.cpp(66): warning C4101: 'myid' : unreferenced local variable
+     1>main.cpp(65): warning C4101: 'numprocs' : unreferenced local variable
+     1>main.cpp(378): warning C4101: 'i' : unreferenced local variable
+     1>main.cpp(381): warning C4101: 'j' : unreferenced local variable
+     1>main.cpp(381): warning C4101: 'i' : unreferenced local variable
+     1>main.cpp(447): warning C4101: 'i' : unreferenced local variable
+     1>main.cpp(449): warning C4101: 'i' : unreferenced local variable
+     1>main.cpp(449): warning C4101: 'j' : unreferenced local variable
+     1>main.cpp(544): warning C4101: 'tid' : unreferenced local variable
+     1>main.cpp(678): warning C4101: 'i' : unreferenced local variable
+     1>main.cpp(678): warning C4101: 'j' : unreferenced local variable
+     1>main.cpp(744): warning C4101: 'i' : unreferenced local variable
+     1>main.cpp(744): warning C4101: 'j' : unreferenced local variable
+     1>main.cpp(809): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
+     1>main.cpp(921): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
        ManifestResourceCompile:
          All outputs are up-to-date.
        Link:
@@ -49,4 +59,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:05.05
+Time Elapsed 00:00:03.49

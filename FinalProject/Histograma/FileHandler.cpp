@@ -40,7 +40,9 @@ void writeResultsToFile(char const path[], vector<Point> cluster_center, float q
 {
 	int tmp =0;
 	FILE *file = fopen(path, "w");
-	fprintf(file, "K= %d QM= %f \n",number_of_clusters,qm);
+	fprintf(file, "Number of clusters with the best measure\n");
+	fprintf(file, "K = %d QM = %f \n",number_of_clusters,qm);
+	fprintf(file, "Centers of the clusters:\n");
 	string str;
 	for (int i = 0 ; i < cluster_center.size(); i++)
 	{
@@ -73,7 +75,9 @@ void readFromFile(char filepath[], int *N, int *dimentions, int *MAX, int *LIMIT
     {
         istringstream ss(line);
 
-		//cout<<line<<endl;
+
+		/*cout << "********Print line input " << i << endl;
+		cout<<line<<endl;*/
 
 
 

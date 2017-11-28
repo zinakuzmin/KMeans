@@ -34,24 +34,68 @@ __global__ void calc2points(double* point_coordinate_1, double* point_coordinate
 
 
 
+__global__ void calculateDistanceForOneCoordinate(double* points, double* sharedResults , int numOfPoints, int numOfCoordinates)
+{
+    int col = threadIdx.x; // 52
+	int row = blockIdx.x; //811
+
+	
+	
+	int pos = row*numOfCoordinates+col;
+
+
+	int block = numOfCoordinates*numOfPoints;
+
+	//Calculate distance between point P1 and all other points (x1-x2)x(x1-x2), (y1-y2)X(y1-y2), ....... and put results in shared temp matrix
+	
+	for (int i = 0; i < numOfPoints;  i++){
+
+		sharedResults[block*row+i*numOfCoordinates+col] = (points[pos]-points[i*numOfCoordinates+col])*(points[pos]-points[i*numOfCoordinates+col]);
+	}
+};
+
+
+__global__ void calculateDistanceBetweenPoints(double* sharedResults , int numOfPoints, int numOfCoordinates, double * results)
+{
+	//1 block, 811 threads
+    int tid = threadIdx.x; 
+	//int row = blockIdx.x; 
+	int block = numOfCoordinates*numOfPoints;
+	int startIdx = tid*block;
+	int endIdx = tid*block+block;
+	
+	double sum = 0;
+	//Work on blocks of 811 rows - sum and calc square root
+	for (int i = 0; i < numOfPoints; i++){
+		for (int j = 0; j < numOfCoordinates; j++){
+			sum += sharedResults[startIdx+i*numOfCoordinates+j];
+		}
+
+		results[tid*numOfPoints+i] = sqrt(sum);
+	}
+
+	
+	
+};
+
+
 void error(double* coordinate_1 ,double* coordinate_2, double* coordinates_arr)
 {
 	cudaFree(coordinate_1);
 	cudaFree(coordinate_2);
 	cudaFree(coordinates_arr);
+	
 }
 
 
- //Helper function for using CUDA to add vectors in parallel.
-cudaError_t calcDistanceCoordiantesWithCuda(double* coordinates_1, double* coordinates_2, double* coordinates_arr, int num_coordinates)
-{
-    double* dev_coordinates_1;
-    double* dev_coordinates_2;
-	double* dev_coordinates_arr;
 
-	dev_coordinates_1 = 0;//(double*)malloc(sizeof(double)*num_coordinates);
-	dev_coordinates_2 = 0;//(double*)malloc(sizeof(double)*num_coordinates);
-	dev_coordinates_arr = 0;//(double*)malloc(sizeof(double)*num_coordinates);
+ //Helper function for using CUDA to add vectors in parallel.
+cudaError_t calcDistanceWithCuda(double* points, double* resultsFromCuda, int numOfCoordinates, int numOfPoints)
+{
+ 
+	double* dev_points;
+	double* sharedResults;
+	double* results;
     cudaError_t cudaStatus;
 
     // Choose which GPU to run on, change this on a multi-GPU system.
@@ -59,89 +103,198 @@ cudaError_t calcDistanceCoordiantesWithCuda(double* coordinates_1, double* coord
     if (cudaStatus != cudaSuccess) {
         fprintf(stderr, "cudaSetDevice failed!  Do you have a CUDA-capable GPU installed?");
         //goto Error;
-		error(dev_coordinates_1, dev_coordinates_2, dev_coordinates_arr);
+		error(dev_points, sharedResults, results);
     }
+
+
+
 
     // Allocate GPU buffers for three vectors (two input, one output)
-	// point_1.coordinates
-	cudaStatus = cudaMalloc((void**)&dev_coordinates_1, sizeof(double)*num_coordinates);
+
+
+	// Array of all points
+	cudaStatus = cudaMalloc((void**)&dev_points, sizeof(double)*numOfCoordinates*numOfPoints);
     if (cudaStatus != cudaSuccess) {
         fprintf(stderr, "cudaMalloc failed!");
-        //goto Error;
-		error(dev_coordinates_1, dev_coordinates_2, dev_coordinates_arr);
+		error(dev_points, sharedResults, results);
     }
 
-	// point_2.coordinates
-    cudaStatus = cudaMalloc((void**)&dev_coordinates_2, sizeof(double)*num_coordinates);
+	// Results array
+	cudaStatus = cudaMalloc((void**)&results, sizeof(double)*numOfPoints*numOfPoints);
     if (cudaStatus != cudaSuccess) {
         fprintf(stderr, "cudaMalloc failed!");
-        //goto Error;
-		error(dev_coordinates_1, dev_coordinates_2, dev_coordinates_arr);
+		error(dev_points, sharedResults, results);
     }
 
-	// coordinates_arr
-	cudaStatus = cudaMalloc((void**)&dev_coordinates_arr, sizeof(double)*num_coordinates);
+	// Shared results array
+	cudaStatus = cudaMalloc((void**)&sharedResults, sizeof(double)*numOfCoordinates*numOfPoints*numOfPoints);
     if (cudaStatus != cudaSuccess) {
         fprintf(stderr, "cudaMalloc failed!");
-        //goto Error;
-		error(dev_coordinates_1, dev_coordinates_2, dev_coordinates_arr);
+		error(dev_points, sharedResults, results);
     }
 
 
-    // Copy input vectors from host memory to GPU buffers.
-	cudaStatus = cudaMemcpyAsync(dev_coordinates_1, coordinates_1, sizeof(double)*num_coordinates, cudaMemcpyHostToDevice);
+    // Copy input array of points from host memory to GPU buffers.
+	cudaStatus = cudaMemcpyAsync(dev_points, points, sizeof(double)*numOfCoordinates*numOfPoints, cudaMemcpyHostToDevice);
     if (cudaStatus != cudaSuccess) {
         fprintf(stderr, "cudaMemcpy dev_coordinates_1 failed!");
-        //goto Error;
-		error(dev_coordinates_1, dev_coordinates_2, dev_coordinates_arr);
+		error(dev_points, sharedResults, results);
     }
 
-	cudaStatus = cudaMemcpyAsync(dev_coordinates_2, coordinates_2, sizeof(double)*num_coordinates, cudaMemcpyHostToDevice);
-    if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "cudaMemcpy dev_coordinates_2 failed!");
-        //goto Error;
-		error(dev_coordinates_1, dev_coordinates_2, dev_coordinates_arr);
-    }
-
-	cudaStatus = cudaMemcpyAsync(dev_coordinates_arr, coordinates_arr, sizeof(double)*num_coordinates, cudaMemcpyHostToDevice);
-    if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "cudaMemcpy dev_coordinates_arr failed!");
-		printf("stderr:%s\n",stderr);
-        //goto Error;
-		error(dev_coordinates_1, dev_coordinates_2, dev_coordinates_arr);
-    }
+	
 
     // Launch a kernel on the GPU with one thread for each element.
-	calc2points<<<1, 52>>>(dev_coordinates_1, dev_coordinates_2 ,dev_coordinates_arr);
-	//calc2pointsWith4Blocks<<<4, 13>>>(dev_coordinates_1, dev_coordinates_2 ,dev_coordinates_arr);
+	calculateDistanceForOneCoordinate<<<numOfPoints, numOfCoordinates>>>(dev_points, sharedResults, numOfPoints, numOfCoordinates);
+	
     // Check for any errors launching the kernel
-    
-	//cudaStatus = cudaGetLastError();
- //   if (cudaStatus != cudaSuccess) {
- //       fprintf(stderr, "addKernel launch failed: %s\n", cudaGetErrorString(cudaStatus));
- //       //goto Error;
-	//	error(dev_coordinates_1, dev_coordinates_2, dev_coordinates_arr);
- //   }
-    
-    // cudaDeviceSynchronize waits for the kernel to finish, and returns
-    // any errors encountered during the launch.
-  //  cudaStatus = cudaDeviceSynchronize();
-  //  if (cudaStatus != cudaSuccess) {
-  //      fprintf(stderr, "cudaDeviceSynchronize returned error code %d after launching addKernel!\n", cudaStatus);
-  //      //goto Error;
-		//error(dev_coordinates_1, dev_coordinates_2, dev_coordinates_arr);
-  //  }
+    cudaStatus = cudaGetLastError();
+    if (cudaStatus != cudaSuccess) {
+        fprintf(stderr, "calcExtendHistograma launch failed: %s\n", cudaGetErrorString(cudaStatus));
+        error(dev_points, sharedResults, results);
+    }
+
+	cudaStatus = cudaDeviceSynchronize();
+    if (cudaStatus != cudaSuccess) {
+        fprintf(stderr, "cudaDeviceSynchronize returned error code %d after launching calcExtendHistograma!\n", cudaStatus);
+       error(dev_points, sharedResults, results);
+    }
+
+	calculateDistanceBetweenPoints<<<1, numOfPoints>>>(sharedResults, numOfPoints, numOfCoordinates, results);
+
+   // Check for any errors launching the kernel
+    cudaStatus = cudaGetLastError();
+    if (cudaStatus != cudaSuccess) {
+        fprintf(stderr, "calcExtendHistograma launch failed: %s\n", cudaGetErrorString(cudaStatus));
+        error(dev_points, sharedResults, results);
+    }
+
+	cudaStatus = cudaDeviceSynchronize();
+    if (cudaStatus != cudaSuccess) {
+        fprintf(stderr, "cudaDeviceSynchronize returned error code %d after launching calcExtendHistograma!\n", cudaStatus);
+       error(dev_points, sharedResults, results);
+    }
+
 
     // Copy output vector from GPU buffer to host memory.
-    cudaStatus = cudaMemcpyAsync(coordinates_arr, dev_coordinates_arr, sizeof(double)*num_coordinates, cudaMemcpyDeviceToHost);
+	cudaStatus = cudaMemcpyAsync(resultsFromCuda, results, sizeof(double)*numOfPoints*numOfPoints, cudaMemcpyDeviceToHost);
     if (cudaStatus != cudaSuccess) {
         fprintf(stderr, "cudaMemcpy failed!");
         //goto Error;
-		error(dev_coordinates_1, dev_coordinates_2, dev_coordinates_arr);
+		error(dev_points, sharedResults, results);
     }
-	error(dev_coordinates_1, dev_coordinates_2, dev_coordinates_arr);
+	
 	return cudaStatus;
 }
+
+
+// //Helper function for using CUDA to add vectors in parallel.
+//cudaError_t calcDistanceCoordiantesWithCuda(double* coordinates_1, double* coordinates_2, double* coordinates_arr, int num_coordinates, int numOfPoints)
+//{
+//    double* dev_coordinates_1;
+//    double* dev_coordinates_2;
+//	double* dev_coordinates_arr;
+//	double* dev_points;
+//	double* sharedResults;
+//	double* results;
+//
+//	dev_coordinates_1 = 0;//(double*)malloc(sizeof(double)*num_coordinates);
+//	dev_coordinates_2 = 0;//(double*)malloc(sizeof(double)*num_coordinates);
+//	dev_coordinates_arr = 0;//(double*)malloc(sizeof(double)*num_coordinates);
+//    cudaError_t cudaStatus;
+//
+//    // Choose which GPU to run on, change this on a multi-GPU system.
+//    cudaStatus = cudaSetDevice(0);
+//    if (cudaStatus != cudaSuccess) {
+//        fprintf(stderr, "cudaSetDevice failed!  Do you have a CUDA-capable GPU installed?");
+//        //goto Error;
+//		error(dev_coordinates_1, dev_coordinates_2, dev_coordinates_arr);
+//    }
+//
+//
+//
+//
+//    // Allocate GPU buffers for three vectors (two input, one output)
+//
+//
+//	// point_1.coordinates
+//	cudaStatus = cudaMalloc((void**)&dev_coordinates_1, sizeof(double)*num_coordinates);
+//    if (cudaStatus != cudaSuccess) {
+//        fprintf(stderr, "cudaMalloc failed!");
+//        //goto Error;
+//		error(dev_coordinates_1, dev_coordinates_2, dev_coordinates_arr);
+//    }
+//
+//	// point_2.coordinates
+//    cudaStatus = cudaMalloc((void**)&dev_coordinates_2, sizeof(double)*num_coordinates);
+//    if (cudaStatus != cudaSuccess) {
+//        fprintf(stderr, "cudaMalloc failed!");
+//        //goto Error;
+//		error(dev_coordinates_1, dev_coordinates_2, dev_coordinates_arr);
+//    }
+//
+//	// coordinates_arr
+//	cudaStatus = cudaMalloc((void**)&dev_coordinates_arr, sizeof(double)*num_coordinates);
+//    if (cudaStatus != cudaSuccess) {
+//        fprintf(stderr, "cudaMalloc failed!");
+//        //goto Error;
+//		error(dev_coordinates_1, dev_coordinates_2, dev_coordinates_arr);
+//    }
+//
+//
+//    // Copy input vectors from host memory to GPU buffers.
+//	cudaStatus = cudaMemcpyAsync(dev_coordinates_1, coordinates_1, sizeof(double)*num_coordinates, cudaMemcpyHostToDevice);
+//    if (cudaStatus != cudaSuccess) {
+//        fprintf(stderr, "cudaMemcpy dev_coordinates_1 failed!");
+//        //goto Error;
+//		error(dev_coordinates_1, dev_coordinates_2, dev_coordinates_arr);
+//    }
+//
+//	cudaStatus = cudaMemcpyAsync(dev_coordinates_2, coordinates_2, sizeof(double)*num_coordinates, cudaMemcpyHostToDevice);
+//    if (cudaStatus != cudaSuccess) {
+//        fprintf(stderr, "cudaMemcpy dev_coordinates_2 failed!");
+//        //goto Error;
+//		error(dev_coordinates_1, dev_coordinates_2, dev_coordinates_arr);
+//    }
+//
+//	cudaStatus = cudaMemcpyAsync(dev_coordinates_arr, coordinates_arr, sizeof(double)*num_coordinates, cudaMemcpyHostToDevice);
+//    if (cudaStatus != cudaSuccess) {
+//        fprintf(stderr, "cudaMemcpy dev_coordinates_arr failed!");
+//		printf("stderr:%s\n",stderr);
+//        //goto Error;
+//		error(dev_coordinates_1, dev_coordinates_2, dev_coordinates_arr);
+//    }
+//
+//    // Launch a kernel on the GPU with one thread for each element.
+//	calc2points<<<1, 52>>>(dev_coordinates_1, dev_coordinates_2 ,dev_coordinates_arr);
+//	//calc2pointsWith4Blocks<<<4, 13>>>(dev_coordinates_1, dev_coordinates_2 ,dev_coordinates_arr);
+//    // Check for any errors launching the kernel
+//    
+//	//cudaStatus = cudaGetLastError();
+// //   if (cudaStatus != cudaSuccess) {
+// //       fprintf(stderr, "addKernel launch failed: %s\n", cudaGetErrorString(cudaStatus));
+// //       //goto Error;
+//	//	error(dev_coordinates_1, dev_coordinates_2, dev_coordinates_arr);
+// //   }
+//    
+//    // cudaDeviceSynchronize waits for the kernel to finish, and returns
+//    // any errors encountered during the launch.
+//  //  cudaStatus = cudaDeviceSynchronize();
+//  //  if (cudaStatus != cudaSuccess) {
+//  //      fprintf(stderr, "cudaDeviceSynchronize returned error code %d after launching addKernel!\n", cudaStatus);
+//  //      //goto Error;
+//		//error(dev_coordinates_1, dev_coordinates_2, dev_coordinates_arr);
+//  //  }
+//
+//    // Copy output vector from GPU buffer to host memory.
+//    cudaStatus = cudaMemcpyAsync(coordinates_arr, dev_coordinates_arr, sizeof(double)*num_coordinates, cudaMemcpyDeviceToHost);
+//    if (cudaStatus != cudaSuccess) {
+//        fprintf(stderr, "cudaMemcpy failed!");
+//        //goto Error;
+//		error(dev_coordinates_1, dev_coordinates_2, dev_coordinates_arr);
+//    }
+//	error(dev_coordinates_1, dev_coordinates_2, dev_coordinates_arr);
+//	return cudaStatus;
+//}
 
 
 
