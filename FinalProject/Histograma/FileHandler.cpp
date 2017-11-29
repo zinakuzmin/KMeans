@@ -8,18 +8,15 @@
 using namespace std;
 
 void readFromFile(char filepath[], int *N, int *dimentions, int *MAX, int *LIMIT, double *QM, vector<Point> * points);
-//void readFromFile(char filepath[], int N, int dimentions, int MAX, int LIMIT, double QM, vector<Point>  * points);
 void writeResultsToFile(char const path[], vector<Point> cluster_center, float qm , int number_of_clusters);
 
 
 vector<double> getVectorFromLine(string line, int numOfColumns){
 	string delimiter = "\t";
-
 	size_t pos = 0;
 	string token;
 	vector<double> pointCoordinates;
-	
-	//cout << "Num of colunms "<< numOfColumns << endl;
+
 
 	while ((pos = line.find(delimiter)) != string::npos) {
 		token = line.substr(0, pos);
@@ -30,9 +27,7 @@ vector<double> getVectorFromLine(string line, int numOfColumns){
 	pos = line.find(delimiter);
 	token = line.substr(0, pos);
 	pointCoordinates.push_back(strtod((token).c_str(),NULL));
-	
-	
-	//cout<<"\nThisIsSize:"<<pointCoordinates.size()<<endl;
+
 	return pointCoordinates;
 }
 
@@ -65,57 +60,26 @@ void writeResultsToFile(char const path[], vector<Point> cluster_center, float q
 
 void readFromFile(char filepath[], int *N, int *dimentions, int *MAX, int *LIMIT, double *QM, vector<Point> * points){
 	
-
     ifstream inputFile(filepath);
     string line;
-
-
 	int i=0;
+
+
     while (getline(inputFile, line))
     {
         istringstream ss(line);
 
-
-		/*cout << "********Print line input " << i << endl;
-		cout<<line<<endl;*/
-
-
-
 		if (i == 0){		
 	        ss >> *N >> *dimentions >> *MAX >> *LIMIT >> *QM;
-			//cout <<  *N << *dimentions << *MAX << *LIMIT << *QM;
 			i++;
-			
-			//(*points).resize(N);
 			continue;
 		}
 
 		Point *p = new Point(getVectorFromLine(line, *dimentions), i-1);
-
-		//p->toString();
 		points->push_back(*p);
-
-
 		i++;
     }
-	//cout <<"mashu";
+	
 
 }
 
-//int main()
-//{
-//	int N;   //Number of products
-//	int n;   //Dimention
-//	double MAX;  //Maximum number of clusters to find
-//	int LIMIT; //Maximum number of iterations of kmeans run
-//	double QM;  //Quality measure
-//	vector<Point> points;
-//
-//	char filepath[] = ("dataset_normalized.txt");
-//	readFromFile(filepath, N, n, MAX, LIMIT, QM, points);
-//
-//	writeResultsToFile("results.txt", points, QM, MAX);
-//
-//	cout<<"Execution completed, press return";
-//	getchar();
-//}

@@ -6,10 +6,9 @@
 #include <stdlib.h>
 #include <iostream>
 #include <vector>
+
 #define readFile FileHandleReadFile
 #define WriteToFile FileHandleWriteToFile
-//#include "Kmeans.h"
-
 
 using namespace std; 
 
@@ -43,10 +42,6 @@ struct Point {
 	}
 };
 
-//extern FileHeader* readFile(char rout[]);
-//extern FileHeader* readFile();
 
 void readFromFile(char filepath[], int *N, int *dimentions, int *MAX, int *LIMIT, double *QM, vector<Point> * points);
-//void readFromFile(char filepath[], int N, int dimentions, int MAX, int LIMIT, double QM, vector<Point> * points);
 void writeResultsToFile(char const path[], vector<Point> cluster_center, float qm , int number_of_clusters);
-//extern void WriteToFile(char rout[], KmeansAns *ans, long numClusters);
