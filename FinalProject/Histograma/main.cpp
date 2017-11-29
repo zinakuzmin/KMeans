@@ -175,6 +175,7 @@ int main(int argc,char *argv[])
 			//accociatePointsToCluster(cluster_centers, &points);
 			accociatePointsToCluster1(cluster_centers, pointsArray, N, number_of_clusters); 
 			countPointsInCluster1(number_of_clusters, pointsArray, N);
+			//printPointsArray(pointsArray, N);
 
 			int pointMoved = 0;
 			int iteration = 0;
@@ -818,15 +819,26 @@ double calculateClusterDiameterWithCuda(Point * points, Point * cluster_centers,
 
 	//Create matrix for all distances from each point to each point
 	double * distances = new double[numOfPointsInCluster*numOfPointsInCluster];
+	for (int i = 0; i< numOfPointsInCluster*numOfPointsInCluster; i++)
+		distances[i] = 0;
+
+
+	//temp
+	/*double * sharedResults = new double[numOfPointsInCluster*numOfPointsInCluster*numOfCoordinates];
+	for (int i = 0; i< numOfPointsInCluster*numOfPointsInCluster*numOfCoordinates; i++)
+		distances[i] = 0;*/
 	
 	//Cuda calculates distances from each point to each point
 	//cudaError_t calcDistanceWithCuda(double* points, double* resultsFromCuda, int numOfCoordinates, int numOfPoints)
 	calcDistanceWithCuda(pointsForCuda, distances, numOfCoordinates,numOfPointsInCluster);
 
 
-	/*for (int i = 0; i < numOfPoints*numOfPoints; i++)
-		cout << "$$$$$$$$$$$$RESULT FROM CUDA " << i << " IS " << distances[i] << endl;
-	*/
+	/*for (int i = 0; i < numOfPointsInCluster*numOfPointsInCluster*numOfCoordinates; i+=2)
+		cout << "$$$$$$$$$$$$TEMP RESULT FROM CUDA " << i << " IS :" << sharedResults[i] << "and " << sharedResults[i+1] << endl;*/
+
+	/*for (int i = 0; i < numOfPointsInCluster*numOfPointsInCluster; i++)
+		cout << "$$$$$$$$$$$$RESULT FROM CUDA " << i << " IS " << distances[i] << endl;*/
+	
 
 	//Find max distance with OMP wuth 8 threads
 	double ompMaxDistance[8] = {0};
@@ -848,6 +860,8 @@ double calculateClusterDiameterWithCuda(Point * points, Point * cluster_centers,
 			max_distance_between_points_in_cluster = ompMaxDistance[i];
 	}
 
+
+	cout << "**************MAX diameter of cluster " << clusterIdx << " IS " << max_distance_between_points_in_cluster << endl;
 
 	clock_t end = clock();
 	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;

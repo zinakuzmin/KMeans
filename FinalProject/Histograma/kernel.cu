@@ -50,7 +50,7 @@ __global__ void calculateDistanceForOneCoordinate(double* points, double* shared
 	
 	for (int i = 0; i < numOfPoints;  i++){
 
-		sharedResults[block*row+i*numOfCoordinates+col] = (points[pos]-points[i*numOfCoordinates+col])*(points[pos]-points[i*numOfCoordinates+col]);
+		sharedResults[(block*row)+(i*numOfCoordinates)+col] = (points[pos]-points[i*numOfCoordinates+col])*(points[pos]-points[i*numOfCoordinates+col]);
 	}
 };
 
@@ -67,8 +67,9 @@ __global__ void calculateDistanceBetweenPoints(double* sharedResults , int numOf
 	double sum = 0;
 	//Work on blocks of 811 rows - sum and calc square root
 	for (int i = 0; i < numOfPoints; i++){
+		sum = 0;
 		for (int j = 0; j < numOfCoordinates; j++){
-			sum += sharedResults[startIdx+i*numOfCoordinates+j];
+			sum += sharedResults[startIdx+(i*numOfCoordinates)+j];
 		}
 
 		results[tid*numOfPoints+i] = sqrt(sum);
@@ -145,6 +146,19 @@ cudaError_t calcDistanceWithCuda(double* points, double* resultsFromCuda, int nu
 
     // Launch a kernel on the GPU with one thread for each element.
 	calculateDistanceForOneCoordinate<<<numOfPoints, numOfCoordinates>>>(dev_points, sharedResults, numOfPoints, numOfCoordinates);
+
+
+	////temp
+	//// Copy output vector from GPU buffer to host memory.
+	//cudaStatus = cudaMemcpyAsync(sharedResults1, sharedResults, sizeof(double)*numOfPoints*numOfPoints*numOfCoordinates, cudaMemcpyDeviceToHost);
+ //   if (cudaStatus != cudaSuccess) {
+ //       fprintf(stderr, "cudaMemcpy failed!");
+ //       //goto Error;
+	//	error(dev_points, sharedResults, results);
+ //   }
+
+
+
 	
     // Check for any errors launching the kernel
     cudaStatus = cudaGetLastError();
